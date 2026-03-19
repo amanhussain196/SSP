@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Handle zero results gracefully
             if ((!data.amazon || data.amazon.length === 0) && (!data.flipkart || data.flipkart.length === 0)) {
-                amazonResults.innerHTML = '<div class="no-results-card">No Amazon matches found.</div>';
+                amazonResults.innerHTML = '<div class="no-results-card">No Amazon matches found. <br><small><a href="/api/debug" target="_blank" style="color:#66fcf1">View Server Screenshot</a></small></div>';
                 flipkartResults.innerHTML = '<div class="no-results-card">No Flipkart matches found.</div>';
                 bestDealBanner.classList.add('hidden');
             } else {

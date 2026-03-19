@@ -33,12 +33,15 @@ async function scrapeAmazon(query) {
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const context = await browser.newContext({
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        viewport: { width: 1280 + Math.floor(Math.random() * 100), height: 720 + Math.floor(Math.random() * 100) }
     });
     const page = await context.newPage();
+    await page.waitForTimeout(1000 + Math.random() * 2000); // Random delay
     
     try {
-        await page.goto(`https://www.amazon.in/s?k=${encodeURIComponent(query)}`, { waitUntil: 'load', timeout: 45000 });
+        await page.goto(`https://www.amazon.in/s?k=${encodeURIComponent(query)}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await page.waitForTimeout(2000); 
         
         // Check for CAPTCHA
         const isCaptcha = await page.evaluate(() => document.body.innerText.includes('Type the characters you see in this image'));
@@ -99,12 +102,15 @@ async function scrapeFlipkart(query) {
         args: ['--no-sandbox', '--disable-setuid-sandbox']
     });
     const context = await browser.newContext({
-        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
+        viewport: { width: 1280 + Math.floor(Math.random() * 100), height: 720 + Math.floor(Math.random() * 100) }
     });
     const page = await context.newPage();
+    await page.waitForTimeout(1000 + Math.random() * 2000); // Random delay
 
     try {
-        await page.goto(`https://www.flipkart.com/search?q=${encodeURIComponent(query)}`, { waitUntil: 'load', timeout: 50000 });
+        await page.goto(`https://www.flipkart.com/search?q=${encodeURIComponent(query)}`, { waitUntil: 'domcontentloaded', timeout: 60000 });
+        await page.waitForTimeout(2000);
         try {
             // Wait for any common product container or wait 10s as fallback
             await page.waitForSelector('div[data-id], div._1AtVbE, div.cPHS70, div.sl-so-m, div._2kHMvA', { timeout: 15000 });
@@ -177,6 +183,16 @@ app.get('/api/search', async (req, res) => {
         logToFile(`[SERVER ERROR] ${error}`);
         res.status(500).json({ error: 'Scraping failed' });
     }
+});
+
+app.get('/api/debug', (req, res) => {
+    const amazonPath = path.join(__dirname, 'amazon_debug.png');
+    const flipkartPath = path.join(__dirname, 'flipkart_debug.png');
+    
+    if (fs.existsSync(amazonPath)) return res.sendFile(amazonPath);
+    if (fs.existsSync(flipkartPath)) return res.sendFile(flipkartPath);
+    
+    res.send('No debug screenshots available. Trigger a search first.');
 });
 
 app.listen(PORT, '0.0.0.0', () => {
