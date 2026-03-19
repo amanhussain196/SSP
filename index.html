@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartShopper AI | Compare Flipkart & Amazon | Real-Time Deals</title>
+    <meta name="description" content="Compare products real-time between Flipkart and Amazon. Find the best deals and save money with SmartShopper AI.">
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts for premium typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body class="dark-mode">
+    <div class="overlay"></div>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <span class="gradient-text">SmartShopper AI</span>
+            </div>
+            <p class="tagline">The Ultimate Price-Slaying Engine ⚡</p>
+        </header>
+
+        <section class="search-section">
+            <div class="search-wrapper">
+                <input type="text" id="searchInput" placeholder="Search for products (e.g., iPhone 15, Headphones)..." autocomplete="off">
+                <button id="searchButton" class="glow-on-hover">Compare Now</button>
+            </div>
+            <div id="loading" class="hidden">
+                <div class="spinner"></div>
+                <p>Scouring the web for the best prices...</p>
+            </div>
+        </section>
+
+        <section id="results" class="results-grid hidden">
+            <!-- Best Deal Highlight -->
+            <div id="best-deal-banner" class="best-deal-container full-width hidden">
+                <div class="deal-card neon-border">
+                    <span class="deal-label">🏆 BEST DEAL DETECTED</span>
+                    <div class="deal-content" id="topDealContent">
+                        <!-- Best deal will be inserted here -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Amazon Results -->
+            <div class="store-column">
+                <div class="store-header amazon">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg" alt="Amazon" class="store-icon">
+                    <h2>Amazon Deals</h2>
+                </div>
+                <div id="amazonResults" class="product-list">
+                    <!-- Amazon cards here -->
+                </div>
+            </div>
+
+            <!-- Flipkart Results -->
+            <div class="store-column">
+                <div class="store-header flipkart">
+                    <img src="https://static-assets-web.flixcart.com/batman-returns/static/svg/fk-logo_9f5042.svg" alt="Flipkart" class="store-icon">
+                    <h2>Flipkart Deals</h2>
+                </div>
+                <div id="flipkartResults" class="product-list">
+                    <!-- Flipkart cards here -->
+                </div>
+            </div>
+        </section>
+        
+        <footer id="footer">
+            <p>&copy; 2026 SmartShopper AI. Empowering Smarter Shopping.</p>
+        </footer>
+    </div>
+
+    <!-- Templates for Product Cards (Used by JS) -->
+    <template id="product-card-template">
+        <div class="product-card glass">
+            <div class="product-image-container">
+                <img src="" alt="Product Image" class="product-image">
+                <div class="price-badge"></div>
+            </div>
+            <div class="product-info">
+                <h3 class="product-title"></h3>
+                <div class="product-meta">
+                    <span class="rating"></span>
+                    <span class="price"></span>
+                </div>
+                <a href="#" target="_blank" class="buy-button">View Deal</a>
+            </div>
+        </div>
+    </template>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+node_modules
+server.log
+*_debug.png
+*_captcha.png
+_current.png
+.env
+.DS_Store
