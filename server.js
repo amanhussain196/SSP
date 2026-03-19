@@ -165,6 +165,10 @@ function logToFile(msg) {
     console.log(msg);
 }
 
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 app.get('/api/search', async (req, res) => {
     const query = req.query.q;
     if (!query) return res.status(400).json({ error: 'Missing query parameter' });

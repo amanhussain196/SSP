@@ -11,9 +11,7 @@ RUN npm install
 # Copy application files
 COPY . .
 
-# Use the dynamic port provided by the host
-ENV PORT=3000
-EXPOSE 3000
+# No hardcoded ENV PORT or EXPOSE, Render will set the port.
 
 # Start command
 CMD ["node", "server.js"]
