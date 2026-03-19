@@ -34,7 +34,7 @@ async function scrapeAmazon(query) {
     });
     const context = await browser.newContext({
         userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-        viewport: { width: 1280 + Math.floor(Math.random() * 100), height: 720 + Math.floor(Math.random() * 100) }
+        viewport: { width: 1920 + Math.floor(Math.random() * 100), height: 1080 + Math.floor(Math.random() * 100) }
     });
     const page = await context.newPage();
     await page.waitForTimeout(1000 + Math.random() * 2000); // Random delay
@@ -46,8 +46,8 @@ async function scrapeAmazon(query) {
         // Check for CAPTCHA
         const isCaptcha = await page.evaluate(() => document.body.innerText.includes('Type the characters you see in this image'));
         if (isCaptcha) {
-            console.log('[AMAZON] CAPTCHA detected. Request may fail.');
-            await page.screenshot({ path: 'amazon_captcha.png' });
+            logToFile('[AMAZON] CAPTCHA detected.');
+            await page.screenshot({ path: path.join(__dirname, 'amazon_captcha.png') });
         }
 
         try {
@@ -81,7 +81,7 @@ async function scrapeAmazon(query) {
         });
 
         if (products.length === 0) {
-            await page.screenshot({ path: 'amazon_debug.png' });
+            await page.screenshot({ path: path.join(__dirname, 'amazon_debug.png') });
         }
 
         return products;
@@ -145,7 +145,7 @@ async function scrapeFlipkart(query) {
         });
 
         if (products.length === 0) {
-            await page.screenshot({ path: 'flipkart_debug.png' });
+            await page.screenshot({ path: path.join(__dirname, 'flipkart_debug.png') });
         }
 
         return products;
@@ -192,11 +192,21 @@ app.get('/api/search', async (req, res) => {
 app.get('/api/debug', (req, res) => {
     const amazonPath = path.join(__dirname, 'amazon_debug.png');
     const flipkartPath = path.join(__dirname, 'flipkart_debug.png');
+    const captchaPath = path.join(__dirname, 'amazon_captcha.png');
     
     if (fs.existsSync(amazonPath)) return res.sendFile(amazonPath);
     if (fs.existsSync(flipkartPath)) return res.sendFile(flipkartPath);
+    if (fs.existsSync(captchaPath)) return res.sendFile(captchaPath);
     
     res.send('No debug screenshots available. Trigger a search first.');
+});
+
+app.get('/api/logs', (req, res) => {
+    if (fs.existsSync(LOG_FILE)) {
+        res.sendFile(LOG_FILE);
+    } else {
+        res.send('Log file not found.');
+    }
 });
 
 app.listen(PORT, '0.0.0.0', () => {
